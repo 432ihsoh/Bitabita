@@ -15,7 +15,7 @@ class _OneLapGaugeState extends State<OneLapGauge>
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: const Duration(milliseconds: 780), // 0.78秒
+      duration: const Duration(milliseconds: 780),
       vsync: this,
     )..repeat();
   }
@@ -28,18 +28,33 @@ class _OneLapGaugeState extends State<OneLapGauge>
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (context, child) {
-        return SizedBox(
-          height: 20, // ゲージの高さ（適宜調整）
-          child: LinearProgressIndicator(
-            value: _controller.value,
-            backgroundColor: Colors.grey,
-            valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
-          ),
-        );
-      },
+    return Column(
+      // Columnでゲージとボタンを縦に並べる
+      mainAxisAlignment: MainAxisAlignment.center, // 縦方向中央揃え
+      children: [
+        AnimatedBuilder(
+          animation: _controller,
+          builder: (context, child) {
+            return SizedBox(
+              height: 20,
+              child: LinearProgressIndicator(
+                value: _controller.value,
+                backgroundColor: Colors.grey,
+                valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
+              ),
+            );
+          },
+        ),
+        const SizedBox(height: 20), // ゲージとボタンの間隔
+        ElevatedButton(
+          // ElevatedButtonウィジェットでボタンを作成
+          onPressed: () {
+            // ボタンが押された時の処理をここに記述
+            // 例: print('PUSHボタンが押されました');
+          },
+          child: const Text('PUSH'), // ボタンのテキスト
+        ),
+      ],
     );
   }
 }
