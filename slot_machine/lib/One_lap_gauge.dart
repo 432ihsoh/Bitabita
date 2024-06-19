@@ -11,13 +11,14 @@ class OneLapGauge extends StatefulWidget {
 class _OneLapGaugeState extends State<OneLapGauge>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  final FocusNode _focusNode = FocusNode(); // FocusNodeを定義
+  int _count = 0;
+  final FocusNode _focusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: const Duration(milliseconds: 780),
+      duration: const Duration(milliseconds: 750),
       vsync: this,
     )..repeat();
   }
@@ -32,9 +33,15 @@ class _OneLapGaugeState extends State<OneLapGauge>
   void _handleKeyEvent(RawKeyEvent event) {
     if (event.logicalKey == LogicalKeyboardKey.space &&
         event.runtimeType == RawKeyDownEvent) {
-      // スペースキーが押された時の処理
-      print('PUSHボタンが押されました (スペースキー)');
+      _incrementCounter();
+      _count--;
     }
+  }
+
+  void _incrementCounter() {
+    setState(() {
+      _count++;
+    });
   }
 
   @override
@@ -59,16 +66,19 @@ class _OneLapGaugeState extends State<OneLapGauge>
             },
           ),
           const SizedBox(height: 20),
+          Text(
+            'Count: $_count',
+            style: const TextStyle(fontSize: 24),
+          ),
+          const SizedBox(height: 20),
           ElevatedButton(
-            autofocus: true, // ボタンに自動的にフォーカスを当てる
+            autofocus: true,
             onFocusChange: (hasFocus) {
               if (!hasFocus) {
-                _focusNode.requestFocus(); // フォーカスが外れたら再取得
+                _focusNode.requestFocus();
               }
             },
-            onPressed: () {
-              print('PUSHボタンが押されました');
-            },
+            onPressed: _incrementCounter,
             child: const Text('PUSH'),
           ),
         ],
