@@ -12,7 +12,9 @@ class _OneLapGaugeState extends State<OneLapGauge>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   int _count = 0;
+  int _vitaCount = 0;
   final FocusNode _focusNode = FocusNode();
+  bool _isInTimingWindow = false;
 
   @override
   void initState() {
@@ -20,7 +22,9 @@ class _OneLapGaugeState extends State<OneLapGauge>
     _controller = AnimationController(
       duration: const Duration(milliseconds: 750),
       vsync: this,
-    )..repeat();
+    )
+      ..addListener(_updateTimingWindow)
+      ..repeat();
   }
 
   @override
@@ -41,6 +45,16 @@ class _OneLapGaugeState extends State<OneLapGauge>
   void _incrementCounter() {
     setState(() {
       _count++;
+      if (_isInTimingWindow) {
+        _vitaCount++;
+      }
+    });
+  }
+
+  void _updateTimingWindow() {
+    double gaugeValue = _controller.value;
+    setState(() {
+      _isInTimingWindow = (gaugeValue >= 0.721 && gaugeValue <= 0.75);
     });
   }
 
@@ -52,22 +66,31 @@ class _OneLapGaugeState extends State<OneLapGauge>
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          AnimatedBuilder(
-            animation: _controller,
-            builder: (context, child) {
-              return SizedBox(
-                height: 20,
-                child: LinearProgressIndicator(
-                  value: _controller.value,
-                  backgroundColor: Colors.grey,
-                  valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
-                ),
-              );
-            },
+          FractionallySizedBox(
+            widthFactor: 2 / 3,
+            child: AnimatedBuilder(
+              animation: _controller,
+              builder: (context, child) {
+                return SizedBox(
+                  height: 20,
+                  child: LinearProgressIndicator(
+                    value: _controller.value,
+                    backgroundColor: Colors.grey,
+                    valueColor:
+                        const AlwaysStoppedAnimation<Color>(Colors.blue),
+                  ),
+                );
+              },
+            ),
           ),
           const SizedBox(height: 20),
           Text(
             'Count: $_count',
+            style: const TextStyle(fontSize: 24),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'ビタ押し成功回数: $_vitaCount',
             style: const TextStyle(fontSize: 24),
           ),
           const SizedBox(height: 20),
