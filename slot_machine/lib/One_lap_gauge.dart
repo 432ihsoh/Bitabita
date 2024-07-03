@@ -11,10 +11,12 @@ class OneLapGauge extends StatefulWidget {
 class _OneLapGaugeState extends State<OneLapGauge>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
+
   int _count = 0;
-  int _vitaCount = 0;
+  int _bitaCount = 0;
   final FocusNode _focusNode = FocusNode();
   bool _isInTimingWindow = false;
+  bool _isBitaSccess = false;
 
   @override
   void initState() {
@@ -39,6 +41,9 @@ class _OneLapGaugeState extends State<OneLapGauge>
         event.runtimeType == RawKeyDownEvent) {
       _incrementCounter();
       _count--;
+      if (_isBitaSccess) {
+        _bitaCount--;
+      }
     }
   }
 
@@ -46,7 +51,10 @@ class _OneLapGaugeState extends State<OneLapGauge>
     setState(() {
       _count++;
       if (_isInTimingWindow) {
-        _vitaCount++;
+        _bitaCount++;
+        _isBitaSccess = true;
+      } else {
+        _isBitaSccess = false;
       }
     });
   }
@@ -54,7 +62,8 @@ class _OneLapGaugeState extends State<OneLapGauge>
   void _updateTimingWindow() {
     double gaugeValue = _controller.value;
     setState(() {
-      _isInTimingWindow = (gaugeValue >= 0.721 && gaugeValue <= 0.75);
+      _isInTimingWindow = (gaugeValue >= 0.962 && gaugeValue <= 1.0) ||
+          (gaugeValue >= 0.0 && gaugeValue <= 0.038);
     });
   }
 
@@ -85,12 +94,12 @@ class _OneLapGaugeState extends State<OneLapGauge>
           ),
           const SizedBox(height: 20),
           Text(
-            'Count: $_count',
+            'ボタンを押した回数: $_count',
             style: const TextStyle(fontSize: 24),
           ),
           const SizedBox(height: 10),
           Text(
-            'ビタ押し成功回数: $_vitaCount',
+            'ビタ押し成功回数: $_bitaCount',
             style: const TextStyle(fontSize: 24),
           ),
           const SizedBox(height: 20),
