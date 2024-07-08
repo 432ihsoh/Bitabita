@@ -76,7 +76,7 @@ class _OneLapGaugeState extends State<OneLapGauge>
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           FractionallySizedBox(
-            widthFactor: 2 / 3,
+            widthFactor: 3 / 5,
             child: AnimatedBuilder(
               animation: _controller,
               builder: (context, child) {
@@ -95,12 +95,22 @@ class _OneLapGaugeState extends State<OneLapGauge>
           const SizedBox(height: 20),
           Text(
             'ボタンを押した回数: $_count',
-            style: const TextStyle(fontSize: 24),
+            style: const TextStyle(
+              fontSize: 24,
+              color: Colors.black,
+              decoration: TextDecoration.underline,
+              decorationColor: Colors.white,
+            ),
           ),
           const SizedBox(height: 10),
           Text(
             'ビタ押し成功回数: $_bitaCount',
-            style: const TextStyle(fontSize: 24),
+            style: const TextStyle(
+              fontSize: 24,
+              color: Colors.black,
+              decoration: TextDecoration.underline,
+              decorationColor: Colors.white,
+            ),
           ),
           const SizedBox(height: 20),
           ElevatedButton(
@@ -112,6 +122,14 @@ class _OneLapGaugeState extends State<OneLapGauge>
             },
             onPressed: _incrementCounter,
             child: const Text('PUSH'),
+          ),
+          const SizedBox(width: 20), // ボタン間のスペース
+          ElevatedButton(
+            // 戻るボタン
+            onPressed: () {
+              Navigator.of(context).pop(); // 前の画面に戻る
+            },
+            child: const Text('戻る'),
           ),
         ],
       ),
