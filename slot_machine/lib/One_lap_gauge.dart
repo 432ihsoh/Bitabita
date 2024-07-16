@@ -77,19 +77,26 @@ class _OneLapGaugeState extends State<OneLapGauge>
         children: [
           FractionallySizedBox(
             widthFactor: 3 / 5,
-            child: AnimatedBuilder(
-              animation: _controller,
-              builder: (context, child) {
-                return SizedBox(
-                  height: 20,
-                  child: LinearProgressIndicator(
-                    value: _controller.value,
-                    backgroundColor: Colors.grey,
-                    valueColor:
-                        const AlwaysStoppedAnimation<Color>(Colors.blue),
-                  ),
-                );
-              },
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 5),
+              child: AnimatedBuilder(
+                animation: _controller,
+                builder: (context, child) {
+                  return SizedBox(
+                    height: 20,
+                    child: LinearProgressIndicator(
+                      minHeight: 5,
+                      value: _controller.value,
+                      backgroundColor: Colors.grey,
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        _controller.value >= 0.962 || _controller.value <= 0.038
+                            ? Colors.red
+                            : Colors.blue,
+                      ),
+                    ),
+                  );
+                },
+              ),
             ),
           ),
           const SizedBox(height: 20),
